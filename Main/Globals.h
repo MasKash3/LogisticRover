@@ -32,6 +32,8 @@
 #define BACK_INDEX 2
 #define LEFT_INDEX 3
 
+#define LIFT_MOTOR_INDEX 1
+
 #define START_BYTE 60.0
 
 extern int data_to_send[SEND_DATA_BUFFER_SIZE];

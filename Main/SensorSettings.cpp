@@ -18,7 +18,7 @@ void Sensors::run() {
 
 	if (sensor_serial.availableForWrite() > 0) {
 
-		DEBUG_PORT.println(data_to_send[1]);
+		DEBUG_PORT.println(data_to_send[LIFT_MOTOR_INDEX]);
 		sensor_serial.write((uint8_t*)&data_to_send, sizeof(data_to_send));
 
 		//		sensor_serial.readBytes((char*)&sensor_received_data, sizeof(sensor_received_data));
