@@ -47,7 +47,7 @@
 #define RB_INDEX 3
 
 #define LIFT_MOTOR_LOW_DEADZONE 0.2
-#define LIFT_MOTOR_DEADZONE 0.3
+#define LIFT_MOTOR_DEADZONE 0.7
 
 #define LB_MOTOR_INDEX 0
 #define LF_MOTOR_INDEX 1
@@ -82,7 +82,7 @@ enum lifting_directions {
 class Rover {
 private:
 
-	bool sides[4];
+	bool sensors[4];
 
 	float motor_speed_modifier[4];
 

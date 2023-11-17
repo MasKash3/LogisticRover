@@ -11,7 +11,7 @@
 
 #define SERVER_PORT 4444
 
-#define CONNECTION_CHECK_DELAY 15000
+#define TIMEOUT 10000
 
 class NetworkConnection {
 private:
@@ -19,6 +19,7 @@ private:
 	float app_received_data[DATA_BUFFER_SIZE];
 
 	char ack_text[10] = "AutonoSky";
+
 	bool client_connected;
 
 public:

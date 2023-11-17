@@ -38,7 +38,8 @@ void NetworkConnection::initWifi(String ssid, String password) {
 
 	while (WiFi.status() != WL_CONNECTED) {
 		time_out_counter = millis();
-		if (WiFi.status() == WL_CONNECT_FAILED || time_out_counter == 10000) {
+		if (WiFi.status() == WL_CONNECT_FAILED || time_out_counter == TIMEOUT) {
+			time_out_counter = 0;
 			DEBUG_PORT.println("Connection failed.");
 			DEBUG_PORT.println("Please re-enter credentials.");
 			credentials.recheck();
