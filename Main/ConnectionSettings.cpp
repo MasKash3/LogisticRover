@@ -27,7 +27,6 @@ void NetworkConnection::init() {
 
 void NetworkConnection::initWifi(String ssid, String password) {
 	unsigned long time_out_counter;
-	DEBUG_PORT.println("");
 	DEBUG_PORT.print("Network: ");
 	DEBUG_PORT.println(ssid);
 

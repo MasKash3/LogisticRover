@@ -79,8 +79,20 @@ enum lifting_directions {
 	LIFT_DOWN
 };
 
+enum MovementState {
+	STOPPED,
+	MOVING_UP,
+	MOVING_DOWN,
+	MOVING_LEFT,
+	MOVING_RIGHT,
+	ROTATING_CLOCKWISE,
+	ROTATING_COUNTERCLOCKWISE
+};
+
+
 class Rover {
 private:
+	int current_movement_state;
 
 	bool sensors[4];
 
