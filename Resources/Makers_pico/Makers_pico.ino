@@ -6,12 +6,12 @@
 #include <SoftwareSerial.h>
 
 const char* ack = "AutonoSkyi";
-SoftwareSerial dataSerial(9, 8); // RX TX
+SoftwareSerial dataSerial(18, 19); // RX TX
 
 // Motor A connections left front
-int enA = 18;
-int in1 = 19;
-int in2 = 20;
+int enA = 12;
+int in1 = 13;
+int in2 = 23;
 
 int dataToSend[4] = { 1, 2, 0, 1 };
 String lift_state = "down";

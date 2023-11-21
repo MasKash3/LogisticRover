@@ -6,38 +6,24 @@
 #include "Globals.h"
 
 // Left front motor
-#define LF_MOTOR_EN_PIN 32
-#define LF_MOTOR_IN1_PIN 27
-#define LF_MOTOR_IN2_PIN 26
+#define LF_MOTOR_EN_PIN 25
+#define LF_MOTOR_IN1_PIN 12
+#define LF_MOTOR_IN2_PIN 14
 
 // Right front motor
-#define LB_MOTOR_EN_PIN 25
-#define LB_MOTOR_IN1_PIN 12
-#define LB_MOTOR_IN2_PIN 14
+#define LB_MOTOR_EN_PIN 32
+#define LB_MOTOR_IN1_PIN 27
+#define LB_MOTOR_IN2_PIN 26
 
 // Left back motor
-#define RF_MOTOR_EN_PIN 23
-#define RF_MOTOR_IN1_PIN 33
-#define RF_MOTOR_IN2_PIN 4
+#define RF_MOTOR_EN_PIN 13
+#define RF_MOTOR_IN1_PIN 19
+#define RF_MOTOR_IN2_PIN 18
 
 // Right back motor
-#define RB_MOTOR_EN_PIN 13
-#define RB_MOTOR_IN1_PIN 19
-#define RB_MOTOR_IN2_PIN 18
-
-// ----------- Channels -------------
-#define FREQUENCY 400
-#define LF_MOTOR_EN_CHANNEL 0
-#define LB_MOTOR_EN_CHANNEL 1
-#define RF_MOTOR_EN_CHANNEL 2
-#define RB_MOTOR_EN_CHANNEL 3
-
-#define RESOLUTION 8
-
-#define NO_PWM 0
-#define MIN_PWM 100
-#define MAX_PWM 130
-//#define MAX_PWM 200
+#define RB_MOTOR_EN_PIN 23
+#define RB_MOTOR_IN1_PIN 33
+#define RB_MOTOR_IN2_PIN 4
 
 #define INITIAL_MOTOR_SPEED 0
 
@@ -46,9 +32,8 @@
 #define LB_INDEX 2
 #define RB_INDEX 3
 
-#define LIFT_MOTOR_LOW_DEADZONE 0.2
-#define LIFT_MOTOR_DEADZONE 0.3
-#define LIFT_MOTOR_INDEX 1
+#define MOTOR_LOW_DEADZONE 0.2
+#define LIFT_MOTOR_DEADZONE 0.7
 
 #define LB_MOTOR_INDEX 0
 #define LF_MOTOR_INDEX 1
@@ -83,7 +68,7 @@ enum lifting_directions {
 class Rover {
 private:
 
-	bool sides[4];
+	bool sensors[4];
 
 	float motor_speed_modifier[4];
 

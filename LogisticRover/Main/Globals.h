@@ -9,11 +9,13 @@
 
 #define DEBUG_PORT Serial
 #define DEBUG_BAUD_RATE 9600
-#define DEBUG_ENABLED
 
+//#define SENSORS_ENABLED
+
+#define DEBUG_ENABLED
 //#define APP_DEBUG_ENABLED
 //#define LIFT_DEBUG_ENABLED
-#define SENSOR_DEBUG_ENABLED
+//#define SENSOR_DEBUG_ENABLED
 //#define DIRECTION_DEBUG_ENABLED
 
 #define DATA_BUFFER_SIZE 6
@@ -31,6 +33,8 @@
 #define RIGHT_INDEX 1
 #define BACK_INDEX 2
 #define LEFT_INDEX 3
+
+#define LIFT_MOTOR_INDEX 1
 
 #define START_BYTE 60.0
 

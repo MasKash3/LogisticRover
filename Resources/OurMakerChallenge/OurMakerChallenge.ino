@@ -5,8 +5,8 @@
 
 
 SoftwareSerial picoSerial(21, 22); // RX TX
-const char* ssid = "Autonosky";
-const char* password = "Nach0WiFi!";
+const char* ssid = "House of Ideas";
+const char* password = "CapeTown#m@SS3006";
 //const char* ssid = "In";
 //const char* password = "12345678";
 const char* ack = "AutonoSky";

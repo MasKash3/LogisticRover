@@ -27,9 +27,9 @@ public:
 
 	void moveDown();
 
-	void run();
-
 	void set(int direction);
+
+	void run();
 
 	void stop();
 };

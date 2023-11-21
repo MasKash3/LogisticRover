@@ -50,5 +50,8 @@
     <ClInclude Include="SensorSettings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="__vm\.Secondary.vsarduino.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
