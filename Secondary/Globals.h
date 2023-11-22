@@ -2,11 +2,14 @@
 
 #pragma once
 
+//#define SENSOR_ENABLED
+//#define DETECTION_ENABLED
+
+
 #define DEBUG_PORT Serial
 #define DEBUG_BAUD_RATE 9600
 
 #define BUFFER_SIZE 6
-
 #define RECEIVE_BUFFER_SIZE 3
 
 #define START_BYTE_INDEX 0
@@ -17,6 +20,8 @@
 
 #define START_BYTE 33
 #define END_BYTE 66
+
+#define SENSOR_COUNT 8
 
 extern bool esp_flag;
 

@@ -248,7 +248,7 @@ void Rover::moveMotors(float LB_speed, float LF_speed, float RF_speed, float RB_
 
 void Rover::rotate(float joystick1_x) {
 
-	float rotation_speed = scaleSpeed(abs(joystick1_x));
+	motor_speed = scaleSpeed(abs(joystick1_x));
 
 	if (joystick1_x < 0) {
 
@@ -261,7 +261,7 @@ void Rover::rotate(float joystick1_x) {
 
 	}
 
-	moveMotors(rotation_speed, rotation_speed, rotation_speed, rotation_speed);
+	moveMotors(motor_speed, motor_speed, motor_speed, motor_speed);
 
 }
 

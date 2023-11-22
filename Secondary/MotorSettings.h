@@ -9,10 +9,14 @@
 #define MOTOR_IN1_PIN 13
 #define MOTOR_IN2_PIN 23
 
+#define LIFT_DURATION 1000
+
 enum directions {
+
 	STOP_DIRECTION,
 	UP,
 	DOWN
+
 };
 
 class Motor {

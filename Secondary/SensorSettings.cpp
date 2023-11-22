@@ -35,56 +35,82 @@ void Sensors::getRawValues() {
 
 
 void Sensors::checkDistance() {
+
 	data_to_send[START_BYTE_INDEX] = START_BYTE;
 	data_to_send[END_BYTE_INDEX] = END_BYTE;
 
 	if ((filtered_value[F1_INDEX] > DISTANCE_THRESHOLD_LOWER && filtered_value[F1_INDEX] < DISTANCE_THRESHOLD_UPPER)
 		|| (filtered_value[F2_INDEX] > DISTANCE_THRESHOLD_LOWER && filtered_value[F2_INDEX] < DISTANCE_THRESHOLD_UPPER)) {
-		//DEBUG_PORT.println("Front obstacle detected");
+
+#ifdef DETECTION_ENABLED
+		DEBUG_PORT.println("Front obstacle detected");
+#endif
 		instructions[FRONT_INDEX] = STOP;
+
 	}
 	else
 	{
+
 		instructions[FRONT_INDEX] = GO;
+
 	}
 
 	if ((filtered_value[R1_INDEX] > DISTANCE_THRESHOLD_LOWER && filtered_value[R1_INDEX] < DISTANCE_THRESHOLD_UPPER)
 		|| (filtered_value[R2_INDEX] > DISTANCE_THRESHOLD_LOWER && filtered_value[R2_INDEX] < DISTANCE_THRESHOLD_UPPER)) {
-		//DEBUG_PORT.println("Right obstacle detected");
+
+#ifdef DETECTION_ENABLED
+		DEBUG_PORT.println("Right obstacle detected");
+#endif
 		instructions[RIGHT_INDEX] = STOP;
+
 	}
 	else
 	{
+
 		instructions[RIGHT_INDEX] = GO;
+
 	}
 
 	if ((filtered_value[B1_INDEX] > DISTANCE_THRESHOLD_LOWER && filtered_value[B1_INDEX] < DISTANCE_THRESHOLD_UPPER)
 		|| (filtered_value[B2_INDEX] > DISTANCE_THRESHOLD_LOWER && filtered_value[B2_INDEX] < DISTANCE_THRESHOLD_UPPER)) {
-		//DEBUG_PORT.println("Back obstacle detected");
+
+#ifdef DETECTION_ENABLED
+		DEBUG_PORT.println("Back obstacle detected");
+#endif
 		instructions[BACK_INDEX] = STOP;
+
 	}
 	else
 	{
+
 		instructions[BACK_INDEX] = GO;
+
 	}
 
 	if ((filtered_value[L1_INDEX] > DISTANCE_THRESHOLD_LOWER && filtered_value[L1_INDEX] < DISTANCE_THRESHOLD_UPPER)
 		|| (filtered_value[L2_INDEX] > DISTANCE_THRESHOLD_LOWER && filtered_value[L2_INDEX] < DISTANCE_THRESHOLD_UPPER)) {
-		DEBUG_PORT.println(raw_values[L1_INDEX]);
-		DEBUG_PORT.println(", ");
-		DEBUG_PORT.println(raw_values[L2_INDEX]);
-		//DEBUG_PORT.println("Left obstacle detected");
+
+#ifdef DETECTION_ENABLED
+		DEBUG_PORT.println("Left obstacle detected");
+#endif
 		instructions[LEFT_INDEX] = STOP;
+
 	}
 	else
 	{
+
 		instructions[LEFT_INDEX] = GO;
+
 	}
 
 	for (int i = 0; i < 4; i++) {
+
 		data_to_send[i + 1] = instructions[i];
 		esp_flag = true;
-		//DEBUG_PORT.println(data_to_send[i + 1]);
+#ifdef DETECTION_ENABLED
+		DEBUG_PORT.println(data_to_send[i + 1]);
+#endif
+
 	}
 }
 
@@ -96,22 +122,29 @@ void Sensors::initKalmanFilter() {
 	Zp = 0.0;
 }
 
-void Sensors::filterValues(int values[8]) {
-	for (int i; i <= 8; i++)
+void Sensors::filterValues(int values[SENSOR_COUNT]) {
+
+	for (int i = 0; i <= SENSOR_COUNT; i++)
 	{
+
 		new_reading = values[i];
 		Xe = new_reading;
 		Pc = covar_error + PROCESS_VARIANCE;
-		kalman_gain = Pc / (Pc + VARIANCE);    
+		kalman_gain = Pc / (Pc + VARIANCE);
 		covar_error = (1 - kalman_gain) * Pc;
 		Xp = Xe;
 		Zp = Xp;
 		Xe = kalman_gain * (new_reading - Zp) + Xp;
-		if (Xe > 2000 && Xe < 4000) {
+
+		if (Xe > KALMAN_LOWER_THRESHOLD && Xe < KALMAN_UPPER_THRESHOLD) {
+
 			filtered_value[i] = Xe;
+
 		}
 		else {
+
 			filtered_value[i] = 0;
+
 		}
 	}
 }

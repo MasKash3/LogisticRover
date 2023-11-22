@@ -15,7 +15,7 @@ void Sensors::init() {
 }
 
 void Sensors::run() {
-	
+
 	if (sensor_serial.availableForWrite() > 0) {
 
 		sensor_serial.write((uint8_t*)&data_to_send, sizeof(data_to_send));
@@ -40,9 +40,13 @@ void Sensors::run() {
 			DEBUG_PORT.print(sensor_received_data[END_BYTE_INDEX], 3);
 #endif // SENSOR_DEBUG_ENABLED			
 
-			//			rover_.monitor(sensor_received_data);
+#ifdef SENSOR_ENABLED
+			rover_.monitor(sensor_received_data);
+#endif // SENSOR_ENABLED
 
 		}
+
+		sensor_serial.flush();
 
 	}
 }

@@ -31,9 +31,10 @@
 #define DISTANCE_THRESHOLD_LOWER 3200
 #define DISTANCE_THRESHOLD_UPPER 4000
 
-#define RESET_PIN 22
+#define KALMAN_LOWER_THRESHOLD 2000
+#define KALMAN_UPPER_THRESHOLD 4500
 
-#define SENSOR_COUNT 8
+#define RESET_PIN 22
 
 #define DIRECTION_COUNT 4
 
@@ -41,8 +42,10 @@
 #define PROCESS_VARIANCE 1E-8
 
 enum rover_clearance {
+
 	STOP,
 	GO
+
 };
 
 class Sensors {
@@ -68,7 +71,7 @@ public:
 
 	void initKalmanFilter();
 
-	void filterValues(int values[8]);
+	void filterValues(int values[SENSOR_COUNT]);
 
 	void getRawValues();
 
