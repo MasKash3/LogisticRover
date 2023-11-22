@@ -49,38 +49,6 @@ void Rover::moveUp() {
 
 }
 
-void Rover::moveUpRight() {
-
-#ifdef DIRECTION_DEBUG_ENABLED
-	DEBUG_PORT.println("move up right");
-#endif // DIRECTION_DEBUG_ENABLED
-	digitalWrite(LB_MOTOR_IN1_PIN, LOW);
-	digitalWrite(LB_MOTOR_IN2_PIN, LOW);
-	digitalWrite(LF_MOTOR_IN1_PIN, HIGH);
-	digitalWrite(LF_MOTOR_IN2_PIN, LOW);
-	digitalWrite(RF_MOTOR_IN1_PIN, LOW);
-	digitalWrite(RF_MOTOR_IN2_PIN, LOW);
-	digitalWrite(RB_MOTOR_IN1_PIN, LOW);
-	digitalWrite(RB_MOTOR_IN2_PIN, HIGH);
-
-}
-
-void Rover::moveUpLeft() {
-
-#ifdef DIRECTION_DEBUG_ENABLED
-	DEBUG_PORT.println("move up left");
-#endif // DIRECTION_DEBUG_ENABLED
-	digitalWrite(LB_MOTOR_IN1_PIN, HIGH);
-	digitalWrite(LB_MOTOR_IN2_PIN, LOW);
-	digitalWrite(LF_MOTOR_IN1_PIN, LOW);
-	digitalWrite(LF_MOTOR_IN2_PIN, LOW);
-	digitalWrite(RF_MOTOR_IN1_PIN, LOW);
-	digitalWrite(RF_MOTOR_IN2_PIN, HIGH);
-	digitalWrite(RB_MOTOR_IN1_PIN, LOW);
-	digitalWrite(RB_MOTOR_IN2_PIN, LOW);
-
-}
-
 void Rover::moveDown() {
 
 #ifdef DIRECTION_DEBUG_ENABLED
@@ -91,38 +59,6 @@ void Rover::moveDown() {
 	digitalWrite(LF_MOTOR_IN1_PIN, LOW);
 	digitalWrite(LF_MOTOR_IN2_PIN, HIGH);
 	digitalWrite(RF_MOTOR_IN1_PIN, HIGH);
-	digitalWrite(RF_MOTOR_IN2_PIN, LOW);
-	digitalWrite(RB_MOTOR_IN1_PIN, HIGH);
-	digitalWrite(RB_MOTOR_IN2_PIN, LOW);
-
-}
-
-void Rover::moveDownLeft() {
-
-#ifdef DIRECTION_DEBUG_ENABLED
-	DEBUG_PORT.println("move down left");
-#endif // DIRECTION_DEBUG_ENABLED
-	digitalWrite(LB_MOTOR_IN1_PIN, LOW);
-	digitalWrite(LB_MOTOR_IN2_PIN, HIGH);
-	digitalWrite(LF_MOTOR_IN1_PIN, LOW);
-	digitalWrite(LF_MOTOR_IN2_PIN, LOW);
-	digitalWrite(RF_MOTOR_IN1_PIN, HIGH);
-	digitalWrite(RF_MOTOR_IN2_PIN, LOW);
-	digitalWrite(RB_MOTOR_IN1_PIN, LOW);
-	digitalWrite(RB_MOTOR_IN2_PIN, LOW);
-
-}
-
-void Rover::moveDownRight() {
-
-#ifdef DIRECTION_DEBUG_ENABLED
-	DEBUG_PORT.println("move down right");
-#endif // DIRECTION_DEBUG_ENABLED
-	digitalWrite(LB_MOTOR_IN1_PIN, LOW);
-	digitalWrite(LB_MOTOR_IN2_PIN, LOW);
-	digitalWrite(LF_MOTOR_IN1_PIN, LOW);
-	digitalWrite(LF_MOTOR_IN2_PIN, HIGH);
-	digitalWrite(RF_MOTOR_IN1_PIN, LOW);
 	digitalWrite(RF_MOTOR_IN2_PIN, LOW);
 	digitalWrite(RB_MOTOR_IN1_PIN, HIGH);
 	digitalWrite(RB_MOTOR_IN2_PIN, LOW);
@@ -216,10 +152,8 @@ void Rover::liftMotorControl(float joystick1_y) {
 #ifdef LIFT_DEBUG_ENABLED
 		DEBUG_PORT.println("Lift up");
 #endif // LIFT_DEBUG_ENABLED
-
 	}
 	else if (joystick1_y < -LIFT_MOTOR_DEADZONE) {
-
 		data_to_send[LIFT_MOTOR_INDEX] = LIFT_DOWN;
 #ifdef LIFT_DEBUG_ENABLED
 		DEBUG_PORT.println("Lift down");
@@ -247,6 +181,8 @@ void Rover::moveMotors(float LB_speed, float LF_speed, float RF_speed, float RB_
 }
 
 void Rover::rotate(float joystick1_x) {
+
+	//rotateCounterClockwise();
 
 	float rotation_speed = scaleSpeed(abs(joystick1_x));
 
@@ -285,7 +221,6 @@ float Rover::scaleSpeed(float speed) {
 		scaled_speed = SPEED_LOWER_BOUND;
 
 	}
-
 	return scaled_speed;
 
 }
@@ -303,21 +238,26 @@ void Rover::calculateMotorSpeeds(float joystick1_x, float joystick2_x, float joy
 
 			moveLeft();
 
-			if (joystick2_x < -0.5 && joystick2_y > 0.8) {
+			if (abs(joystick2_y) > 0.3) {
 
-				moveUpLeft();
+				speedModifier(X_AXIS, joystick2_x, joystick2_y);
+
+				LB_speed = scaleSpeed(joystick2_x) + motor_speed_modifier[LB_MOTOR_INDEX] * joystick2_x;
+				LF_speed = scaleSpeed(joystick2_x) + motor_speed_modifier[LF_MOTOR_INDEX] * joystick2_x;
+				RF_speed = scaleSpeed(joystick2_x) + motor_speed_modifier[RF_MOTOR_INDEX] * joystick2_x;
+				RB_speed = scaleSpeed(joystick2_x) + motor_speed_modifier[RB_MOTOR_INDEX] * joystick2_x;
 
 			}
-			else if (joystick2_x < -0.5 && joystick2_y < -0.8) {
+			else {
 
-				moveDownLeft();
+				LB_speed = scaleSpeed(abs(joystick2_x));
+				LF_speed = scaleSpeed(abs(joystick2_x));
+				RF_speed = scaleSpeed(abs(joystick2_x));
+				RB_speed = scaleSpeed(abs(joystick2_x));
 
 			}
 
-			LB_speed = scaleSpeed(abs(joystick2_x));
-			LF_speed = scaleSpeed(abs(joystick2_x));
-			RF_speed = scaleSpeed(abs(joystick2_x));
-			RB_speed = scaleSpeed(abs(joystick2_x));
+
 
 		}
 
@@ -329,49 +269,54 @@ void Rover::calculateMotorSpeeds(float joystick1_x, float joystick2_x, float joy
 
 			moveRight();
 
-			if (joystick2_x > 0.5 && joystick2_y > 0.8) {
+			if (abs(joystick2_y) > 0.3) {
 
-				moveUpRight();
+				speedModifier(X_AXIS, joystick2_x, joystick2_y);
+
+				LB_speed = scaleSpeed(abs(joystick2_x) + motor_speed_modifier[LB_MOTOR_INDEX] * joystick2_x);
+				LF_speed = scaleSpeed(abs(joystick2_x) + motor_speed_modifier[LF_MOTOR_INDEX] * joystick2_x);
+				RF_speed = scaleSpeed(abs(joystick2_x) + motor_speed_modifier[RF_MOTOR_INDEX] * joystick2_x);
+				RB_speed = scaleSpeed(abs(joystick2_x) + motor_speed_modifier[RB_MOTOR_INDEX] * joystick2_x);
 
 			}
-			else if (joystick2_x > 0.5 && joystick2_y < -0.8) {
+			else {
 
-				moveDownRight();
+				LB_speed = scaleSpeed(abs(joystick2_x));
+				LF_speed = scaleSpeed(abs(joystick2_x));
+				RF_speed = scaleSpeed(abs(joystick2_x));
+				RB_speed = scaleSpeed(abs(joystick2_x));
 
 			}
-
-			LB_speed = scaleSpeed(abs(joystick2_x));
-			LF_speed = scaleSpeed(abs(joystick2_x));
-			RF_speed = scaleSpeed(abs(joystick2_x));
-			RB_speed = scaleSpeed(abs(joystick2_x));
 
 		}
 	}
 	else if (abs(joystick2_x) < abs(joystick2_y)) {
 
-		if (joystick2_y > 0
+		if (joystick2_y >= 0
 #ifdef SENSORS_ENABLED
 			&& sensors[FRONT_INDEX] == GO
 #endif // SENSORS_ENABLED
 			) {
 
 			moveUp();
+			if (abs(joystick2_x) > 0.3) {
 
-			if (joystick2_x > 0.8 && joystick2_y > 0.5) {
+				speedModifier(Y_AXIS, joystick2_x, joystick2_y);
 
-				moveUpRight();
+				LB_speed = scaleSpeed(joystick2_y) + (motor_speed_modifier[LB_MOTOR_INDEX] * joystick2_y);
+				LF_speed = scaleSpeed(joystick2_y) + (motor_speed_modifier[LF_MOTOR_INDEX] * joystick2_y);
+				RF_speed = scaleSpeed(joystick2_y) + (motor_speed_modifier[RF_MOTOR_INDEX] * joystick2_y);
+				RB_speed = scaleSpeed(joystick2_y) + (motor_speed_modifier[RB_MOTOR_INDEX] * joystick2_y);
 
 			}
-			else if (joystick2_x < -0.8 && joystick2_y > 0.5) {
+			else {
 
-				moveUpLeft();
+				LB_speed = scaleSpeed(joystick2_y);
+				LF_speed = scaleSpeed(joystick2_y);
+				RF_speed = scaleSpeed(joystick2_y);
+				RB_speed = scaleSpeed(joystick2_y);
 
 			}
-
-			LB_speed = scaleSpeed(joystick2_y);
-			LF_speed = scaleSpeed(joystick2_y);
-			RF_speed = scaleSpeed(joystick2_y);
-			RB_speed = scaleSpeed(joystick2_y);
 
 		}
 		else if (joystick2_y < 0
@@ -382,21 +327,25 @@ void Rover::calculateMotorSpeeds(float joystick1_x, float joystick2_x, float joy
 
 			moveDown();
 
-			if (joystick2_x > 0.8 && joystick2_y < -0.5) {
+			if (abs(joystick2_x) > 0.3) {
 
-				moveDownRight();
+				speedModifier(Y_AXIS, joystick2_x, joystick2_y);
+
+				LB_speed = scaleSpeed(abs(joystick2_y) + motor_speed_modifier[LB_MOTOR_INDEX] * joystick2_y);
+				LF_speed = scaleSpeed(abs(joystick2_y) + motor_speed_modifier[LF_MOTOR_INDEX] * joystick2_y);
+				RF_speed = scaleSpeed(abs(joystick2_y) + motor_speed_modifier[RF_MOTOR_INDEX] * joystick2_y);
+				RB_speed = scaleSpeed(abs(joystick2_y) + motor_speed_modifier[RB_MOTOR_INDEX] * joystick2_y);
 
 			}
-			else if (joystick2_x < -0.8 && joystick2_y < -0.5) {
+			else {
 
-				moveDownLeft();
+				LB_speed = scaleSpeed(abs(joystick2_y));
+				LF_speed = scaleSpeed(abs(joystick2_y));
+				RF_speed = scaleSpeed(abs(joystick2_y));
+				RB_speed = scaleSpeed(abs(joystick2_y));
 
 			}
 
-			LB_speed = scaleSpeed(abs(joystick2_y));
-			LF_speed = scaleSpeed(abs(joystick2_y));
-			RF_speed = scaleSpeed(abs(joystick2_y));
-			RB_speed = scaleSpeed(abs(joystick2_y));
 
 		}
 	}
@@ -410,6 +359,105 @@ void Rover::calculateMotorSpeeds(float joystick1_x, float joystick2_x, float joy
 
 		moveMotors(LB_speed, LF_speed, RF_speed, RB_speed);
 
+	}
+}
+
+
+// Speed modifiers
+void Rover::mixDownLeft(float joystick) {
+
+	motor_speed_modifier[LB_MOTOR_INDEX] = -joystick;
+	motor_speed_modifier[LF_MOTOR_INDEX] = joystick;
+	motor_speed_modifier[RF_MOTOR_INDEX] = -joystick;
+	motor_speed_modifier[RB_MOTOR_INDEX] = joystick;
+
+}
+
+void Rover::mixDownRight(float joystick) {
+
+	motor_speed_modifier[LB_MOTOR_INDEX] = joystick;
+	motor_speed_modifier[LF_MOTOR_INDEX] = -joystick;
+	motor_speed_modifier[RF_MOTOR_INDEX] = joystick;
+	motor_speed_modifier[RB_MOTOR_INDEX] = -joystick;
+
+}
+
+void Rover::mixUpLeft(float joystick) {
+
+	motor_speed_modifier[LB_MOTOR_INDEX] = joystick;
+	motor_speed_modifier[LF_MOTOR_INDEX] = -joystick;
+	motor_speed_modifier[RF_MOTOR_INDEX] = joystick;
+	motor_speed_modifier[RB_MOTOR_INDEX] = -joystick;
+
+}
+
+void Rover::mixUpRight(float joystick) {
+
+	motor_speed_modifier[LB_MOTOR_INDEX] = -joystick;
+	motor_speed_modifier[LF_MOTOR_INDEX] = joystick;
+	motor_speed_modifier[RF_MOTOR_INDEX] = -joystick;
+	motor_speed_modifier[RB_MOTOR_INDEX] = joystick;
+
+}
+
+void Rover::speedModifier(int axis, float joystick2_x, float joystick2_y) {
+
+	if (axis == X_AXIS) {
+
+		if (joystick2_y > 0) {
+
+			if (joystick2_x > 0) {
+
+				mixUpRight(joystick2_y);
+
+			}
+			else {
+
+				mixUpLeft(joystick2_y);
+
+			}
+		}
+		else {
+
+			if (joystick2_y >= 0) {
+
+				mixDownRight(joystick2_y);
+
+			}
+			else {
+
+				mixDownLeft(joystick2_y);
+
+			}
+		}
+	}
+	else if (axis == Y_AXIS) {
+
+		if (joystick2_x >= 0) {
+
+			if (joystick2_y >= 0) {
+
+				mixUpRight(joystick2_x);
+
+			}
+			else {
+
+				mixDownRight(joystick2_x);
+
+			}
+		}
+		else {
+			if (joystick2_y >= 0) {
+
+				mixUpLeft(joystick2_x);
+
+			}
+			else {
+
+				mixDownLeft(joystick2_x);
+
+			}
+		}
 	}
 }
 

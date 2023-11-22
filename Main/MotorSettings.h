@@ -49,30 +49,23 @@
 #define DISTANCE_THRESHOLD 30
 
 enum rover_clearance {
-
 	STOP,
 	GO
-
 };
 
 enum modifier_axes {
-
 	X_AXIS,
 	Y_AXIS,
 	BOTH_AXES
-
 };
 
 enum lifting_directions {
-
 	STOP_LIFT,
 	LIFT_UP,
 	LIFT_DOWN
-
 };
 
 class Rover {
-
 private:
 
 	bool sensors[4];
@@ -95,19 +88,21 @@ private:
 
 	void moveRight();
 
-	void moveUpLeft();
-
-	void moveUpRight();
-
-	void moveDownLeft();
-
-	void moveDownRight();
-
 	void rotateClockwise();
 
 	void rotateCounterClockwise();
 
+	void mixUpRight(float joystick);
+
+	void mixUpLeft(float joystick);
+
+	void mixDownRight(float joystick);
+
+	void mixDownLeft(float joystick);
+
 	void moveMotors(float LB_speed, float LF_speed, float RF_speed, float RB_speed);
+
+	void speedModifier(int axis, float joystick2_x, float joystick2_y);
 
 	void liftMotorControl(float joystick1_y);
 
@@ -121,5 +116,4 @@ public:
 	void motorControl(float received_data[6]);
 
 	void monitor(float sensors_instructions[DATA_BUFFER_SIZE]);
-
 };

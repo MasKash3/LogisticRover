@@ -17,15 +17,12 @@
 #define END_BYTE 66
 
 class Sensors {
-
 private:
-	
-public:
 
+public:
 	float sensor_received_data[DATA_BUFFER_SIZE];
 
 	void init();
 
 	void run();
-
 };

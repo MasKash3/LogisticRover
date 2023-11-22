@@ -13,8 +13,7 @@
 
 #define TIMEOUT 10000
 
-class RoverSystem {
-
+class NetworkConnection {
 private:
 
 	float app_received_data[DATA_BUFFER_SIZE];

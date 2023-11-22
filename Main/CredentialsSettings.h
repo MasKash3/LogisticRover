@@ -16,7 +16,6 @@
 #define CREDENTIAL_INDEX 7
 
 class Credentials {
-
 private:
 
 	bool serial_flag;
