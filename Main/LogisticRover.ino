@@ -1,6 +1,6 @@
 #include "ConnectionSettings.h"
 
-NetworkConnection rover_system;
+RoverSystem rover_system;
 
 void setup() {
 

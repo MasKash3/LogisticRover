@@ -51,6 +51,9 @@ void Rover::moveUp() {
 
 void Rover::moveUpRight() {
 
+#ifdef DIRECTION_DEBUG_ENABLED
+	DEBUG_PORT.println("move up right");
+#endif // DIRECTION_DEBUG_ENABLED
 	digitalWrite(LB_MOTOR_IN1_PIN, LOW);
 	digitalWrite(LB_MOTOR_IN2_PIN, LOW);
 	digitalWrite(LF_MOTOR_IN1_PIN, HIGH);
@@ -64,6 +67,9 @@ void Rover::moveUpRight() {
 
 void Rover::moveUpLeft() {
 
+#ifdef DIRECTION_DEBUG_ENABLED
+	DEBUG_PORT.println("move up left");
+#endif // DIRECTION_DEBUG_ENABLED
 	digitalWrite(LB_MOTOR_IN1_PIN, HIGH);
 	digitalWrite(LB_MOTOR_IN2_PIN, LOW);
 	digitalWrite(LF_MOTOR_IN1_PIN, LOW);
@@ -93,6 +99,9 @@ void Rover::moveDown() {
 
 void Rover::moveDownLeft() {
 
+#ifdef DIRECTION_DEBUG_ENABLED
+	DEBUG_PORT.println("move down left");
+#endif // DIRECTION_DEBUG_ENABLED
 	digitalWrite(LB_MOTOR_IN1_PIN, LOW);
 	digitalWrite(LB_MOTOR_IN2_PIN, HIGH);
 	digitalWrite(LF_MOTOR_IN1_PIN, LOW);
@@ -106,6 +115,9 @@ void Rover::moveDownLeft() {
 
 void Rover::moveDownRight() {
 
+#ifdef DIRECTION_DEBUG_ENABLED
+	DEBUG_PORT.println("move down right");
+#endif // DIRECTION_DEBUG_ENABLED
 	digitalWrite(LB_MOTOR_IN1_PIN, LOW);
 	digitalWrite(LB_MOTOR_IN2_PIN, LOW);
 	digitalWrite(LF_MOTOR_IN1_PIN, LOW);
@@ -204,8 +216,10 @@ void Rover::liftMotorControl(float joystick1_y) {
 #ifdef LIFT_DEBUG_ENABLED
 		DEBUG_PORT.println("Lift up");
 #endif // LIFT_DEBUG_ENABLED
+
 	}
 	else if (joystick1_y < -LIFT_MOTOR_DEADZONE) {
+
 		data_to_send[LIFT_MOTOR_INDEX] = LIFT_DOWN;
 #ifdef LIFT_DEBUG_ENABLED
 		DEBUG_PORT.println("Lift down");
@@ -233,8 +247,6 @@ void Rover::moveMotors(float LB_speed, float LF_speed, float RF_speed, float RB_
 }
 
 void Rover::rotate(float joystick1_x) {
-
-	//rotateCounterClockwise();
 
 	float rotation_speed = scaleSpeed(abs(joystick1_x));
 
@@ -273,6 +285,7 @@ float Rover::scaleSpeed(float speed) {
 		scaled_speed = SPEED_LOWER_BOUND;
 
 	}
+
 	return scaled_speed;
 
 }

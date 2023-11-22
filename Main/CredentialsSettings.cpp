@@ -4,7 +4,7 @@
 
 #include "CredentialsSettings.h"
 
-NetworkConnection connectivity;
+RoverSystem connectivity;
 
 void Credentials::init() {
 
@@ -85,7 +85,9 @@ char* Credentials::readFromSerial() {
 
 			}
 		}
+
 		delay(100);
+
 	}
 }
 
@@ -97,8 +99,11 @@ void Credentials::writeCredentials(char address, String ssid, String password) {
 
 	for (int i = 0; i < _size; i++)
 	{
+
 		EEPROM.write(address + i, credentials[i]);
+	
 	}
+
 	EEPROM.write(address + _size, '\0');   //Add termination null character for String Data
 	EEPROM.commit();
 
@@ -113,10 +118,13 @@ String Credentials::readCredentials(char address) {
 	k = EEPROM.read(address);
 	while (k != '\0' && len < 500)   //Read until null character
 	{
+
 		k = EEPROM.read(address + len);
 		data[len] = k;
 		len++;
+
 	}
+
 	data[len] = '\0';
 	return String(data);
 
